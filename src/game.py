@@ -5,6 +5,7 @@ from src.move import Move
 from src.type import Type
 from src.damage import Damage
 from src.player import Player, EffectivenessPlayer
+from src.utils import print_slow
 import json
 import random
 
@@ -84,14 +85,14 @@ class Game:
         move.update_pp(-1)
         # update HP of pokemon2
         pokemon2.update_hp(-damage_dealt)
-        print("{} used {}...".format(pokemon1.name, move.name))
+        print_slow("{} used {}...".format(pokemon1.name, move.name))
         if damage_dealt == 0:
-            print("{} avoided the attack...".format(pokemon2.name))
+            print_slow("{} avoided the attack...".format(pokemon2.name))
 
     def switch(self, player, pokemon_index):
         player.current_pokemon = player.pokemons[pokemon_index]
         player.current_pokemon_index = pokemon_index
-        print("Player {}: {} is switched out...".format(player.name, player.current_pokemon.name))
+        print_slow("Player {}: {} is switched out...".format(player.name, player.current_pokemon.name))
         
 
     def print_basic_info(self, turn, pokemon1, pokemon2):
@@ -184,12 +185,18 @@ class Game:
         while(not gameOver):
             self.print_basic_info(turn, self.player1.current_pokemon, self.player2.current_pokemon)
             command = input('Player1 - Enter a command (fight, switch, exit): ')
+            while command == 'list':
+                action1 = self.player1.handle_command(command)
+                command = input('Player1 - Enter a command (fight, switch, exit): ')
             action1 = self.player1.handle_command(command)
             if action1[0] == 'exit':
                 print('Bye...')
                 break
 
             command = input('Player2 - Enter a command (fight, switch, exit): ')
+            while command == 'list':
+                action2 = self.player2.handle_command(command)
+                command = input('Player1 - Enter a command (fight, switch, exit): ')
             action2 = self.player2.handle_command(command)
             if action2[0] == 'exit':
                 print('Bye...')

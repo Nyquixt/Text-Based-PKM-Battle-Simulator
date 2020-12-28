@@ -7,31 +7,39 @@ class Player:
         self.remaining_pokemons = 3
     
     def handle_command(self, command):
-        if command.lower() == 'fight':
-            # choose a move
-            for i, m in enumerate(self.current_pokemon.moves):
-                print('({}): {} ({}/{})'.format(i, m.name, m.pp, m.max_pp))
-            issued_move = int(input('Choose a move number (0-3): '))
-            return (command.lower(), self.current_pokemon, issued_move)
-        elif command.lower() == 'switch':
-            # display possible options of pokemons
-            valid_switching_pokemons = [] # index of valid pokemons for switching
-            for i, p in enumerate(self.pokemons):
-                if p.hp <= 0:
-                    print('({}): {} (Fainted)'.format(i, p.name))
-                else:
-                    valid_switching_pokemons.append(i)
-                    print('({}): {}'.format(i, p.name))
-            # switch current pokemon out for a pokemon on the bench
-            
-            while True:
-                switched_pokemon = int(input('Choose a pokemon to switch out (0-2): '))
-                if switched_pokemon in valid_switching_pokemons:
-                    break
+        while True:
+            if command.lower() == 'fight':
+                # choose a move
+                for i, m in enumerate(self.current_pokemon.moves):
+                    print('({}): {} ({}/{})'.format(i, m.name, m.pp, m.max_pp))
+                issued_move = int(input('Choose a move number (0-3): '))
+                return (command.lower(), self.current_pokemon, issued_move)
+            elif command.lower() == 'switch':
+                # display possible options of pokemons
+                valid_switching_pokemons = [] # index of valid pokemons for switching
+                for i, p in enumerate(self.pokemons):
+                    if p.hp <= 0:
+                        print('({}): {} (Fainted)'.format(i, p.name))
+                    else:
+                        valid_switching_pokemons.append(i)
+                        print('({}): {}'.format(i, p.name))
+                # switch current pokemon out for a pokemon on the bench
+                
+                while True:
+                    switched_pokemon = int(input('Choose a pokemon to switch out (0-2): '))
+                    if switched_pokemon in valid_switching_pokemons:
+                        break
 
-            return (command.lower(), self.current_pokemon_index, switched_pokemon)
-        elif command.lower() == 'exit':
-            return (command.lower(), None, None)
+                return (command.lower(), self.current_pokemon_index, switched_pokemon)
+            elif command.lower() == 'list': # list pokemons
+                for i, p in enumerate(self.pokemons):
+                    if p.hp <= 0:
+                        print('({}): {} (Fainted)'.format(i, p.name))
+                    else:
+                        print('({}): {}'.format(i, p.name))
+                return (command.lower(), None, None)
+            elif command.lower() == 'exit':
+                return (command.lower(), None, None)
 
 class EffectivenessPlayer:
     '''
